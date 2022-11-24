@@ -1,9 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { EmailService } from 'src/email/email.service';
 import * as uuid from 'uuid';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entity/user.entity';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { ulid } from 'ulid';
 
 @Injectable()
@@ -12,11 +16,10 @@ export class UsersService {
     private emailService: EmailService,
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
+    private connection: Connection,
   ) {}
 
   async createUser(name: string, email: string, password: string) {
-    console.log(name, email, password);
-
     const userExist = await this.checkUserExists(email);
     if (userExist) {
       throw new BadRequestException('이미 가입된 이메일입니다.');
@@ -24,7 +27,13 @@ export class UsersService {
 
     const signupVerifyToken = uuid.v1();
 
-    await this.saveUser(name, email, password, signupVerifyToken);
+    // await this.saveUser(name, email, password, signupVerifyToken);
+    await this.saveUserUsingQueryRunner(
+      name,
+      email,
+      password,
+      signupVerifyToken,
+    );
     await this.sendMemberJoinEmail(email, signupVerifyToken);
   }
 
@@ -52,6 +61,39 @@ export class UsersService {
       email,
       signupVerifyToken,
     );
+  }
+
+  private async saveUserUsingQueryRunner(
+    name: string,
+    email: string,
+    password: string,
+    signupVerifyToken: string,
+  ) {
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const user = new UserEntity();
+      user.id = ulid();
+      user.name = name;
+      user.email = email;
+      user.password = password;
+      user.signupVerifyToken = signupVerifyToken;
+
+      await queryRunner.manager.save(user);
+
+      // throw new InternalServerErrorException();
+
+      await queryRunner.commitTransaction();
+    } catch (e) {
+      // 에러 발생시 롤백
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // 직접 생성한 QueryRunner는 해제시켜주어야 함
+      await queryRunner.release();
+    }
   }
 
   async verifyEmail(signupVerifyToken: string) {
