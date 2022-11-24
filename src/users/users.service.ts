@@ -90,6 +90,9 @@ export class UsersService {
     } catch (e) {
       // 에러 발생시 롤백
       await queryRunner.rollbackTransaction();
+      throw new BadRequestException(
+        'transaction 처리 중 에러가 발생하였습니다.',
+      );
     } finally {
       // 직접 생성한 QueryRunner는 해제시켜주어야 함
       await queryRunner.release();
