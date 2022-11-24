@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import emailConfig from './config/emailConfig';
 import { validationSchema } from './config/validationSchema';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from './entity/user.entity';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: 'test',
-      entities: [__dirname + '/**/*/entity{.ts,.js}'],
+      entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE),
     }),
   ],
