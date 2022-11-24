@@ -1,6 +1,6 @@
 {
   "type": "mysql",
-  "host": "prsm-stage",
+  "host": "localhost",
   "port": 3306,
   "username": "root",
   "password": "test",
@@ -13,6 +13,7 @@
     "dist/migrations/*{.ts,.js}"
   ],
   "cli": {
+    "entitiesDir": "src/entity",
     "migrationsDir": "src/migrations"
   },
   "migrationsTableName": "migrations"

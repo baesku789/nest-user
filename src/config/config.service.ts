@@ -17,6 +17,7 @@ export class ConfigService {
       synchronize: false,
       migrations: ['dist/migrations/*{.ts,.js}'],
       cli: {
+        entitiesDir: 'src/entity',
         migrationsDir: 'src/migrations',
       },
       migrationsTableName: 'migrations',
