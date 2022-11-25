@@ -17,7 +17,8 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateUserCommand } from './command/create-user.command';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { GetUserInfoQuery } from './query/get-user-info.query';
 
 @Controller('users')
 export class UsersController {
@@ -25,6 +26,7 @@ export class UsersController {
     private readonly usersService: UsersService,
     @Inject(Logger) private readonly logger: LoggerService,
     private commandBus: CommandBus,
+    private queryBus: QueryBus,
   ) {}
 
   @Post()
@@ -61,6 +63,8 @@ export class UsersController {
     @Headers() headers: any,
     @Param('id') userId: string,
   ): Promise<any> {
-    return await this.usersService.getUserInfo(userId);
+    const getUserQueryInfo = new GetUserInfoQuery(userId);
+
+    return this.queryBus.execute(getUserQueryInfo);
   }
 }
