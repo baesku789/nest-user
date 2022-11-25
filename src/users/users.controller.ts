@@ -4,6 +4,8 @@ import {
   Get,
   Headers,
   Inject,
+  Logger,
+  LoggerService,
   Param,
   Post,
   Query,
@@ -14,14 +16,12 @@ import { UsersService } from './users.service';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthGuard } from '../auth/auth.guard';
-import { Logger as WinstonLogger } from 'winston';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: WinstonLogger,
+    @Inject(Logger) private readonly logger: LoggerService,
   ) {}
 
   @Post()
@@ -32,7 +32,7 @@ export class UsersController {
   }
 
   private printCreateUserLog(dto) {
-    this.logger.info('info', dto);
+    this.logger.debug(dto);
   }
 
   @Post('/email-verify')
