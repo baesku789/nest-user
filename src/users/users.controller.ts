@@ -16,19 +16,25 @@ import { UsersService } from './users.service';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { CreateUserCommand } from './command/create-user.command';
+import { CommandBus } from '@nestjs/cqrs';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     @Inject(Logger) private readonly logger: LoggerService,
+    private commandBus: CommandBus,
   ) {}
 
   @Post()
   async createUser(@Body() dto: CreateUserDto): Promise<void> {
     this.printCreateUserLog(dto);
     const { name, email, password } = dto;
-    return this.usersService.createUser(name, email, password);
+
+    const command = new CreateUserCommand(name, email, password);
+
+    return this.commandBus.execute(command);
   }
 
   private printCreateUserLog(dto) {

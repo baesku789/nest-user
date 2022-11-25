@@ -39,18 +39,18 @@ export class UsersService {
     await this.sendMemberJoinEmail(email, signupVerifyToken);
   }
 
-  private async checkUserExists(email: string) {
+  async checkUserExists(email: string) {
     return await this.usersRepository.findOne({ email });
   }
 
-  private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
+  async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
     await this.emailService.sendMemberJoinVerification(
       email,
       signupVerifyToken,
     );
   }
 
-  private async saveUserUsingQueryRunner(
+  async saveUserUsingQueryRunner(
     name: string,
     email: string,
     password: string,

@@ -6,10 +6,18 @@ import { EmailModule } from '../email/email.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { AuthService } from '../auth/auth.service';
+import { CqrsModule } from '@nestjs/cqrs';
+import { CreateUserHandler } from './command/create-user.handler';
 
 @Module({
-  imports: [EmailModule, TypeOrmModule.forFeature([UserEntity])],
+  imports: [EmailModule, TypeOrmModule.forFeature([UserEntity]), CqrsModule],
   controllers: [UsersController],
-  providers: [UsersService, EmailService, AuthService, Logger],
+  providers: [
+    CreateUserHandler,
+    EmailService,
+    AuthService,
+    Logger,
+    UsersService,
+  ],
 })
 export class UsersModule {}
