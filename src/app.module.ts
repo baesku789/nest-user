@@ -10,6 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import authConfig from './config/authConfig';
 import { WinstonModule } from 'nest-winston';
+import { LoggingModule } from './logging/logging.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { WinstonModule } from 'nest-winston';
       validationSchema,
     }),
     TypeOrmModule.forRoot(),
+    LoggingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
