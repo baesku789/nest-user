@@ -39,8 +39,8 @@ export class UsersService {
     await this.sendMemberJoinEmail(email, signupVerifyToken);
   }
 
-  private checkUserExists(email: string) {
-    return false; // TODO : DB 연동 후 구현
+  private async checkUserExists(email: string) {
+    return await this.usersRepository.findOne({ email });
   }
 
   private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
