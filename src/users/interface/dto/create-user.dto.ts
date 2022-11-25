@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { Notin } from '../../decorator/notin.decorator';
+import { Notin } from '../../../decorator/notin.decorator';
 
 export class CreateUserDto {
   @Transform((params) => params.value.trim())

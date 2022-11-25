@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { EmailService } from 'src/email/email.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../entity/user.entity';
+import { UserEntity } from './infra/db/entity/user.entity';
 import { Connection, Repository } from 'typeorm';
 import { ulid } from 'ulid';
 import { AuthService } from '../auth/auth.service';
@@ -114,17 +114,17 @@ export class UsersService {
     });
   }
 
-  async getUserInfo(userId: string) {
-    const user = await this.usersRepository.findOne({ id: userId });
-
-    if (!user) {
-      throw new BadRequestException('유저가 존재하지 않습니다.');
-    }
-
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    };
-  }
+  // async getUserInfo(userId: string) {
+  //   const user = await this.usersRepository.findOne({ id: userId });
+  //
+  //   if (!user) {
+  //     throw new BadRequestException('유저가 존재하지 않습니다.');
+  //   }
+  //
+  //   return {
+  //     id: user.id,
+  //     name: user.name,
+  //     email: user.email,
+  //   };
+  // }
 }
