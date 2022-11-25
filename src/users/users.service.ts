@@ -115,11 +115,16 @@ export class UsersService {
   }
 
   async getUserInfo(userId: string) {
-    // TODO
-    // 1. userId를 가진 유저가 존해하는지 DB에서 확인하고 없다면 에러
-    // 2. 조회된 유저정보 반환
+    const user = await this.usersRepository.findOne({ id: userId });
 
-    // throw new Error('Method not implemented');
-    return 'Database is not setting';
+    if (!user) {
+      throw new BadRequestException('유저가 존재하지 않습니다.');
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
   }
 }
