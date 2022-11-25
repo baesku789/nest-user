@@ -8,6 +8,7 @@ import { UserEntity } from '../entity/user.entity';
 import { AuthService } from '../auth/auth.service';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateUserHandler } from './command/create-user.handler';
+import { UserEventHandler } from './event/user-event.handler';
 
 @Module({
   imports: [EmailModule, TypeOrmModule.forFeature([UserEntity]), CqrsModule],
@@ -18,6 +19,7 @@ import { CreateUserHandler } from './command/create-user.handler';
     AuthService,
     Logger,
     UsersService,
+    UserEventHandler,
   ],
 })
 export class UsersModule {}

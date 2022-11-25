@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { EmailService } from 'src/email/email.service';
-import * as uuid from 'uuid';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { Connection, Repository } from 'typeorm';
@@ -21,34 +20,35 @@ export class UsersService {
     private authService: AuthService,
   ) {}
 
-  async createUser(name: string, email: string, password: string) {
-    const userExist = await this.checkUserExists(email);
-    if (userExist) {
-      throw new BadRequestException('이미 가입된 이메일입니다.');
-    }
-
-    const signupVerifyToken = uuid.v1();
-
-    // await this.saveUser(name, email, password, signupVerifyToken);
-    await this.saveUserUsingQueryRunner(
-      name,
-      email,
-      password,
-      signupVerifyToken,
-    );
-    await this.sendMemberJoinEmail(email, signupVerifyToken);
-  }
+  // async createUser(name: string, email: string, password: string) {
+  //   const userExist = await this.checkUserExists(email);
+  //   if (userExist) {
+  //     throw new BadRequestException('이미 가입된 이메일입니다.');
+  //   }
+  //
+  //   const signupVerifyToken = uuid.v1();
+  //
+  //   // await this.saveUser(name, email, password, signupVerifyToken);
+  //   await this.saveUserUsingQueryRunner(
+  //     name,
+  //     email,
+  //     password,
+  //     signupVerifyToken,
+  //   );
+  //
+  //   await this.sendMemberJoinEmail(email, signupVerifyToken);
+  // }
 
   async checkUserExists(email: string) {
     return await this.usersRepository.findOne({ email });
   }
 
-  async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
-    await this.emailService.sendMemberJoinVerification(
-      email,
-      signupVerifyToken,
-    );
-  }
+  // async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
+  //   await this.emailService.sendMemberJoinVerification(
+  //     email,
+  //     signupVerifyToken,
+  //   );
+  // }
 
   async saveUserUsingQueryRunner(
     name: string,
