@@ -7,7 +7,12 @@ import * as fs from 'fs';
 async function bootstrap() {
   await makeOrmConfig();
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger:
+      process.env.NODE_ENV === 'production'
+        ? ['error', 'warn', 'log']
+        : ['error', 'warn', 'log', 'debug', 'verbose'],
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
