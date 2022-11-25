@@ -13,6 +13,9 @@ import { LoggingModule } from './logging/logging.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TaskService } from './task/task.service';
 import { BatchModule } from './batch/batch.module';
+import { HealthCheckController } from './health-check/health-check.controller';
+import { TerminusModule } from '@nestjs/terminus';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -29,8 +32,10 @@ import { BatchModule } from './batch/batch.module';
     LoggingModule,
     ScheduleModule.forRoot(),
     BatchModule,
+    TerminusModule,
+    HttpModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, TaskService],
+  controllers: [AppController, HealthCheckController],
+  providers: [AppService, TaskService, HealthCheckController],
 })
 export class AppModule {}
