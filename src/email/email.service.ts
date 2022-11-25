@@ -30,7 +30,7 @@ export class EmailService {
     emailAddress: string,
     signupVerfiyToken: string,
   ) {
-    const url = `${this.config.baseUrl}/users/email-verify?signupVerfiyToken=${signupVerfiyToken}`;
+    const url = `${this.config.baseUrl}/users/email-verify?signupVerifyToken=${signupVerfiyToken}`;
 
     const mailOptions: EmailOptions = {
       to: emailAddress,
