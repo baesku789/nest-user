@@ -9,8 +9,10 @@ import { validationSchema } from './config/validationSchema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import authConfig from './config/authConfig';
-import { WinstonModule } from 'nest-winston';
 import { LoggingModule } from './logging/logging.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskService } from './task/task.service';
+import { BatchModule } from './batch/batch.module';
 
 @Module({
   imports: [
@@ -25,8 +27,10 @@ import { LoggingModule } from './logging/logging.module';
     }),
     TypeOrmModule.forRoot(),
     LoggingModule,
+    ScheduleModule.forRoot(),
+    BatchModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TaskService],
 })
 export class AppModule {}
